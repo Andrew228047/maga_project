@@ -4,7 +4,7 @@ const express = require('express');
 const session = require('express-session');
 // Імпортуємо MySQLStore
 const MySQLStore = require('express-mysql-session')(session); 
-const db = require('./config/db'); // Ваш пул підключень
+const db = require('./db'); // Ваш пул підключень
 
 const app = express();
 
