@@ -5,7 +5,8 @@ const bodyParser = require('body-parser');
 
 // 1. Ініціалізація та конфігурація
 const app = express();
-const PORT = process.env.PORT || 3000; // Використовувати порт Render або 3000 локально
+const PORT = process.env.PORT || 3000; // Використовуйте порт, наданий Render, або 3000 локально
+
 app.listen(PORT, () => {
     console.log(`Сервер працює на порту ${PORT}`);
 });
