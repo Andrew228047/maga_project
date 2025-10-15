@@ -7,9 +7,6 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 3000; // Використовуйте порт, наданий Render, або 3000 локально
 
-app.listen(PORT, () => {
-    console.log(`Сервер працює на порту ${PORT}`);
-});
 
 // 2. Налаштування шаблонізатора EJS
 app.set('view engine', 'ejs');
