@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аудиторія <%= room.name %> - Деталі</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover {
+            background-color: #49637c;
+        }
+        .container {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #5cb85c;
+            display: inline-block;
+            padding-bottom: 5px;
+            width: 100%;
+        }
+        
+        /* Картка статусу */
+        .status-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-title {
+            font-size: 1.2rem;
+            color: #555;
+        }
+        .status-indicator {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .status-available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-occupied {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-info {
+            font-size: 1.1rem;
+            margin-top: 10px;
+            color: #333;
+        }
+        
+        /* Таблиця розкладу */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .schedule-table th, .schedule-table td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        .schedule-table th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        .schedule-table td:first-child {
+            font-weight: bold;
+            text-align: left;
+            background-color: #f9f9f9;
+        }
+        /* Стилі для "ВІЛЬНА" */
+        .free {
+            background-color: #e6ffe6;
+            color: #155724;
+            font-weight: bold;
+        }
+        /* Стилі для зайнятого часу */
+        .occupied {
+            background-color: #ffeded;
+            color: #a94442;
+        }
+        /* Адаптивність таблиці для мобільних пристроїв */
+        @media (max-width: 900px) {
+            .schedule-table, .schedule-table thead, .schedule-table tbody, .schedule-table th, .schedule-table td, .schedule-table tr { 
+                display: block; 
+            }
+            .schedule-table thead tr { 
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            .schedule-table tr { 
+                border: 1px solid #ccc;
+                margin-bottom: 20px;
+            }
+            .schedule-table td { 
+                border: none;
+                border-bottom: 1px solid #eee; 
+                position: relative;
+                padding-left: 50%; 
+                text-align: right;
+            }
+            .schedule-table td:before { 
+                position: absolute;
+                top: 0;
+                left: 6px;
+                width: 45%; 
+                padding-right: 10px; 
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                color: #555;
+            }
+            /* Створюємо псевдо-заголовки */
+            .schedule-table tr:nth-child(n) td:nth-child(2):before { content: "<%= dayNames[0] %>"; }
+            .schedule-table tr:nth-child(n) td:nth-child(3):before { content: "<%= dayNames[1] %>"; }
+            .schedule-table tr:nth-child(n) td:nth-child(4):before { content: "<%= dayNames[2] %>"; }
+            .schedule-table tr:nth-child(n) td:nth-child(5):before { content: "<%= dayNames[3] %>"; }
+            .schedule-table tr:nth-child(n) td:nth-child(6):before { content: "<%= dayNames[4] %>"; }
+            .schedule-table tr:nth-child(n) td:nth-child(7):before { content: "<%= dayNames[5] %>"; } /* <-- НОВИЙ ЗАГОЛОВОК ДЛЯ СУБОТИ */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Аудиторія <%= room.name %></h1>
+        <div class="nav-links">
+            <a href="/rooms">До списку аудиторій</a>
+            <% if (user && user.role === 'admin') { %>
+                <a href="/admin/dashboard">Адмін-панель</a>
+            <% } %>
+            <a href="/logout">Вихід</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Деталі та Розклад: <%= room.name %></h2>
+
+        <!-- Картка поточного статусу -->
+        <div class="status-card">
+            <div>
+                <div class="status-title">Поточний статус (зараз: <%= new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' }) %>)</div>
+                <div class="status-info">
+                    Місткість: <%= room.capacity %> осіб. Опис: <%= room.description || 'Не вказано.' %>
+                </div>
+            </div>
+            
+            <% if (status.occupied) { %>
+                <div class="status-indicator status-occupied">
+                    ЗАЙНЯТО
+                </div>
+            <% } else { %>
+                <div class="status-indicator status-available">
+                    ВІЛЬНА
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Деталі поточного статусу -->
+        <% if (status.time) { %>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 1.1rem; color: #34495e;">
+                **Пара <%= status.occupied ? 'триває' : 'триває' %>:** (<%= status.time %>)
+                <%= status.occupied ? `Предмет: ${status.details}` : 'Аудиторія вільна у цей час.' %>
+            </p>
+        <% } else { %>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 1.1rem; color: #777;">
+                Зараз перерва, або пари закінчилися.
+            </p>
+        <% } %>
+
+        <!-- Розклад на тиждень -->
+        <h2>Розклад занять</h2>
+        
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>Час пари</th>
+                    <% dayNames.forEach(day => { %>
+                        <th><%= day %></th>
+                    <% }) %>
+                </tr>
+            </thead>
+            <tbody>
+                <% lessonTimes.forEach((time, lessonIndex) => { %>
+                    <tr>
+                        <td>
+                            Пара <%= time.lesson_number %>
+                            <br>
+                            <small><%= time.start_time.substring(0, 5) %> - <%= time.end_time.substring(0, 5) %></small>
+                        </td>
+                        <% // Ітеруємо 6 разів (для 6 днів) %>
+                        <% for (let day = 0; day < 6; day++) { %>
+                            <% 
+                                // FIX: Додаємо перевірку на існування schedule[day], щоб уникнути TypeError, якщо бекенд 
+                                // (routes/rooms.js) не надав даних на всі 6 днів.
+                                const daySchedule = schedule[day];
+                                const subject = (daySchedule && daySchedule[lessonIndex]) ? daySchedule[lessonIndex] : 'ВІЛЬНА'; 
+                            %>
+                            <td class="<%= subject === 'ВІЛЬНА' ? 'free' : 'occupied' %>">
+                                <%= subject %>
+                            </td>
+                        <% } %>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

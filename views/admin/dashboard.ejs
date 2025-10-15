@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін-панель</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #34495e; /* Темний заголовок */
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+        .nav a:hover {
+            background-color: #49637c;
+        }
+        .container {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+        }
+        
+        /* Стилі секцій */
+        .card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        .card h3 {
+            border-bottom: 2px solid #5cb85c;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #34495e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Стилі таблиць */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .data-table th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+            color: #555;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        .data-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* Стилі для кнопок */
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .btn-add {
+            background-color: #5cb85c; /* Зелений */
+            color: white;
+        }
+        .btn-add:hover {
+            background-color: #4cae4c;
+        }
+        .btn-edit {
+            background-color: #f0ad4e; /* Помаранчевий */
+            color: white;
+        }
+        .btn-edit:hover {
+            background-color: #ec971f;
+        }
+        .btn-delete {
+            background-color: #d9534f; /* Червоний */
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c9302c;
+        }
+        .btn-action-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Стилі форм */
+        .form-add-new {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: end;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Адмін-панель: Керування</h1>
+        <div class="nav">
+            <span><%= user.username %> (<%= user.role %>)</span>
+            <a href="/rooms">Перейти до аудиторій</a>
+            <a href="/logout" class="btn btn-delete">Вихід</a>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <% if (success) { %>
+            <div class="alert-success">
+                <%= success %>
+            </div>
+        <% } %>
+
+        <!-- ======================================================= -->
+        <!-- Секція 1: Керування Аудиторіями -->
+        <!-- ======================================================= -->
+        <div class="card">
+            <h3>
+                Аудиторії
+                <button class="btn btn-add" onclick="document.getElementById('addRoomForm').style.display='grid'">+ Додати аудиторію</button>
+            </h3>
+
+            <!-- Форма додавання аудиторії (показати/приховати JS) -->
+            <form id="addRoomForm" action="/admin/rooms/add" method="POST" class="form-add-new" style="display:none;">
+                <div class="form-group">
+                    <label for="room_name">Назва (напр. 301)</label>
+                    <input type="text" id="room_name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="room_capacity">Місткість</label>
+                    <input type="number" id="room_capacity" name="capacity" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="room_description">Опис</label>
+                    <input type="text" id="room_description" name="description">
+                </div>
+                <button type="submit" class="btn btn-add">Зберегти</button>
+            </form>
+
+            <!-- Таблиця аудиторій -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Назва</th>
+                        <th>Місткість</th>
+                        <th>Опис</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% rooms.forEach(room => { %>
+                        <tr>
+                            <td><%= room.id %></td>
+                            <td><%= room.name %></td>
+                            <td><%= room.capacity %></td>
+                            <td><%= room.description %></td>
+                            <td>
+                                <div class="btn-action-group">
+                                    <a href="/admin/rooms/edit/<%= room.id %>" class="btn btn-edit">Редагувати</a>
+                                    <form action="/admin/rooms/delete/<%= room.id %>" method="POST" onsubmit="return confirm('Ви впевнені, що хочете видалити аудиторію <%= room.name %>?');">
+                                        <button type="submit" class="btn btn-delete">Видалити</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- ======================================================= -->
+        <!-- Секція 2: Керування Розкладом -->
+        <!-- ======================================================= -->
+        <div class="card">
+            <h3>
+                Розклад
+                <button class="btn btn-add" onclick="document.getElementById('addScheduleForm').style.display='grid'">+ Додати заняття</button>
+            </h3>
+            
+            <!-- Форма додавання заняття -->
+            <form id="addScheduleForm" action="/admin/schedule/add" method="POST" class="form-add-new" style="display:none;">
+                <div class="form-group">
+                    <label for="sch_room_id">Аудиторія</label>
+                    <select id="sch_room_id" name="room_id" required>
+                        <% rooms.forEach(room => { %>
+                            <option value="<%= room.id %>"><%= room.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sch_day">День тижня</label>
+                    <select id="sch_day" name="day_of_week" required>
+                        <% dayNames.forEach((day, index) => { %>
+                            <% if (index > 0 && index < 7) { %> <!-- Пн (1) - Пт (5) -->
+                                <option value="<%= index %>"><%= day %></option>
+                            <% } %>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sch_lesson">Номер пари</label>
+                    <select id="sch_lesson" name="lesson_number" required>
+                         <% lessonTimes.forEach(time => { %>
+                            <option value="<%= time.lesson_number %>"><%= time.lesson_number %> (<%= time.start_time.substring(0, 5) %> - <%= time.end_time.substring(0, 5) %>)</option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sch_subject">Предмет/Дисципліна</label>
+                    <input type="text" id="sch_subject" name="subject" required>
+                </div>
+                <button type="submit" class="btn btn-add" style="grid-column: span 1 / auto;">Зберегти</button>
+            </form>
+
+            <!-- Таблиця розкладу -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Аудиторія</th>
+                        <th>День</th>
+                        <th>Пара</th>
+                        <th>Предмет</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% scheduleItems.forEach(item => { %>
+                        <tr>
+                            <td><%= item.id %></td>
+                            <td><%= item.room_name %></td>
+                            <td><%= dayNames[item.day_of_week] %></td>
+                            <td><%= item.lesson_number %></td>
+                            <td><%= item.subject %></td>
+                            <td>
+                                <div class="btn-action-group">
+                                    <a href="/admin/schedule/edit/<%= item.id %>" class="btn btn-edit">Редагувати</a>
+                                    <form action="/admin/schedule/delete/<%= item.id %>" method="POST" onsubmit="return confirm('Ви впевнені, що хочете видалити цей запис?');">
+                                        <button type="submit" class="btn btn-delete">Видалити</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- ======================================================= -->
+        <!-- Секція 3: Керування Користувачами -->
+        <!-- ======================================================= -->
+        <div class="card">
+            <h3>
+                Користувачі
+                <button class="btn btn-add" onclick="document.getElementById('addUserForm').style.display='grid'">+ Додати користувача</button>
+            </h3>
+            
+             <!-- Форма додавання користувача -->
+            <form id="addUserForm" action="/admin/users/add" method="POST" class="form-add-new" style="display:none;">
+                <div class="form-group">
+                    <label for="user_username">Логін</label>
+                    <input type="text" id="user_username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="user_password">Пароль</label>
+                    <input type="password" id="user_password" name="password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="user_role">Роль</label>
+                    <select id="user_role" name="role" required>
+                        <option value="user">Користувач</option>
+                        <option value="admin">Адміністратор</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-add">Створити</button>
+            </form>
+
+            <!-- Таблиця користувачів -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Логін</th>
+                        <th>Роль</th>
+                        <th>Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(u => { %>
+                        <tr>
+                            <td><%= u.id %></td>
+                            <td><%= u.username %></td>
+                            <td><%= u.role %></td>
+                            <td>
+                                <div class="btn-action-group">
+                                    <a href="#" class="btn btn-edit" onclick="document.getElementById('editUserForm_<%= u.id %>').style.display='block';">Редагувати</a>
+                                    
+                                    <form action="/admin/users/delete/<%= u.id %>" method="POST" onsubmit="return confirm('Ви впевнені, що хочете видалити користувача <%= u.username %>?');">
+                                        <button type="submit" class="btn btn-delete" <%= u.id == user.id ? 'disabled' : '' %>>Видалити</button>
+                                    </form>
+                                </div>
+
+                                <!-- Форма редагування (прихована) -->
+                                <div id="editUserForm_<%= u.id %>" class="form-add-new" style="display:none; margin-top:10px; border:1px dashed #ccc;">
+                                    <form action="/admin/users/edit/<%= u.id %>" method="POST" style="grid-column: span 3 / auto;">
+                                        <div class="form-group">
+                                            <label>Новий Логін</label>
+                                            <input type="text" name="username" value="<%= u.username %>" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Нова Роль</label>
+                                            <select name="role" required>
+                                                <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>Користувач</option>
+                                                <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>Адміністратор</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-edit">Оновити дані</button>
+                                    </form>
+
+                                    <form action="/admin/users/change-password/<%= u.id %>" method="POST" style="grid-column: span 3 / auto; border-top: 1px dotted #ccc; padding-top: 15px; margin-top: 15px;">
+                                        <div class="form-group">
+                                            <label>Змінити пароль</label>
+                                            <input type="password" name="new_password" placeholder="Новий пароль (мін. 6 символів)" required minlength="6">
+                                        </div>
+                                        <button type="submit" class="btn btn-edit" style="background-color: #3498db;">Змінити пароль</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</body>
+</html>

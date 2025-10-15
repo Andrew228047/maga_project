@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список Аудиторій</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #34495e; /* Темний заголовок */
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover {
+            background-color: #49637c;
+        }
+        .container {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h2 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #5cb85c;
+            display: inline-block;
+            padding-bottom: 5px;
+            width: 100%;
+        }
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .room-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .room-card h3 {
+            margin-top: 0;
+            color: #5cb85c;
+            font-size: 1.8rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .room-card p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .room-card .capacity {
+            font-weight: bold;
+        }
+        .room-card .description {
+            font-size: 0.95rem;
+            color: #777;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Аудиторії</h1>
+        <div class="nav-links">
+            <% if (user) { %>
+                <% if (user.role === 'admin') { %>
+                    <a href="/admin/dashboard">Адмін-панель</a>
+                <% } %>
+                <a href="/logout">Вихід</a>
+            <% } else { %>
+                <a href="/login">Вхід</a>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Доступні Аудиторії</h2>
+        
+        <div class="room-grid">
+            <% rooms.forEach(room => { %>
+                <a href="/room/<%= room.id %>" class="room-card">
+                    <h3>Аудиторія <%= room.name %></h3>
+                    <p>Місткість: <span class="capacity"><%= room.capacity %></span> осіб</p>
+                    <p class="description"><%= room.description || 'Опис відсутній.' %></p>
+                </a>
+            <% }) %>
+        </div>
+        
+    </div>
+</body>
+</html>

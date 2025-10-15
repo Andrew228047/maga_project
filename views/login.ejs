@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вхід - Аудиторії</title>
+    <style>
+        /* Стилі для центрування та фону */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6; /* Світло-сірий фон */
+            display: flex;
+            justify-content: center; /* Центрування по горизонталі */
+            align-items: center; /* Центрування по вертикалі */
+            min-height: 100vh; /* Забезпечуємо повну висоту екрана */
+            margin: 0;
+            padding: 20px;
+        }
+        /* Стилі для картки форми */
+        .login-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* М'яка тінь */
+            width: 100%;
+            max-width: 400px; /* Обмеження ширини форми */
+            text-align: center;
+        }
+        /* Стилі для заголовка */
+        .login-card h2 {
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #5cb85c; /* Зелена лінія під заголовком */
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        /* Стилі для елементів форми */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box; /* Важливо для правильної ширини */
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-color: #5cb85c;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(92, 184, 92, 0.25);
+        }
+        /* Стилі для кнопки */
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #5cb85c; /* Зелений колір */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .btn-primary:hover {
+            background-color: #4cae4c; /* Трохи темніший при наведенні */
+        }
+        .btn-primary:active {
+            transform: scale(0.99);
+        }
+        /* Стилі для повідомлення про помилку */
+        .error-message {
+            background-color: #f2dede;
+            color: #a94442;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ebccd1;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>Вхід до системи</h2>
+        
+        <% if (error) { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <input type="text" id="username" name="username" class="form-control" placeholder="Логін" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Пароль" required>
+            </div>
+            <button type="submit" class="btn-primary">Увійти</button>
+        </form>
+    </div>
+</body>
+</html>

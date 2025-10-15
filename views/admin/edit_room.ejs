@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагування аудиторії: <%= room.name %></title>
+    <style>
+        body { font-family: 'Arial', sans-serif; margin: 0; background-color: #f4f7f6; color: #333; }
+        .header { background-color: #34495e; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .header h1 { margin: 0; font-size: 1.5rem; }
+        .nav-links a { color: white; text-decoration: none; margin-left: 20px; padding: 8px 12px; border-radius: 6px; transition: background-color 0.3s; }
+        .nav-links a:hover { background-color: #49637c; }
+        .container { padding: 40px; max-width: 700px; margin: 0 auto; }
+        .card { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); border-left: 5px solid #e67e22; }
+        h2 { color: #34495e; margin-top: 0; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 0.95rem; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #e67e22;
+            outline: none;
+        }
+        .action-btns { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 1rem; font-weight: bold; transition: background-color 0.3s; }
+        .btn-submit { background-color: #e67e22; color: white; }
+        .btn-submit:hover { background-color: #d35400; }
+        .btn-cancel { background-color: #95a5a6; color: white; }
+        .btn-cancel:hover { background-color: #7f8c8d; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Адмін-панель</h1>
+        <div class="nav-links">
+            <a href="/admin/dashboard">Повернутися до дашборду</a>
+            <a href="/logout">Вихід</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Редагування Аудиторії: <%= room.name %></h2>
+
+            <form action="/admin/rooms/edit/<%= room.id %>" method="POST">
+                <div class="form-group">
+                    <label for="name">Назва аудиторії</label>
+                    <input type="text" id="name" name="name" value="<%= room.name %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="capacity">Місткість (кількість місць)</label>
+                    <input type="number" id="capacity" name="capacity" value="<%= room.capacity %>" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Опис</label>
+                    <textarea id="description" name="description" rows="4"><%= room.description %></textarea>
+                </div>
+
+                <div class="action-btns">
+                    <button type="submit" class="btn btn-submit">Зберегти зміни</button>
+                    <a href="/admin/dashboard" class="btn btn-cancel">Скасувати</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

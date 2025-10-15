@@ -1,0 +1,188 @@
+/* public/css/style.css */
+
+/* === Базові Налаштування === */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    color: #1e3a8a; /* Темно-синій */
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 10px;
+    margin-top: 20px;
+}
+
+a {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #1e3a8a;
+}
+
+/* === Навігація (Navbar) === */
+nav {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+nav .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background-color: transparent;
+    box-shadow: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav a, nav span {
+    color: #bfdbfe;
+    margin-left: 15px;
+}
+
+nav a:hover {
+    color: #ffffff;
+}
+hr { display: none; }
+
+/* === Форми та Елементи Введення === */
+input[type="text"], input[type="password"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Важливо для width: 100% */
+}
+
+button[type="submit"], .button {
+    background-color: #3b82f6;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover, .button:hover {
+    background-color: #1e3a8a;
+}
+
+/* === Секція Аудиторій (Index Page) === */
+.room-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.room-list li {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 5px solid #3b82f6;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.room-list li a {
+    font-size: 1.2em;
+    font-weight: bold;
+    display: block;
+}
+
+/* === Деталі Аудиторії (Room Detail) === */
+.status-box {
+    padding: 20px;
+    border: 2px solid;
+    font-weight: bold;
+    margin: 20px 0;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.occupied {
+    background-color: #fee2e2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+.free {
+    background-color: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+/* === Таблиці === */
+table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #e5e7eb;
+    padding: 12px;
+}
+
+th {
+    background-color: #eff6ff;
+    color: #1e3a8a;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* === Адмін-Панель (Dashboard) === */
+.admin-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.admin-section {
+    flex: 1 1 45%; 
+    min-width: 300px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.admin-full-width {
+    flex: 1 1 100%;
+}
+
+.action-form button {
+    padding: 5px 10px;
+    font-size: 0.85em;
+    margin: 2px 0;
+}
+
+.success {
+    background-color: #d1fae5;
+    color: #065f46;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}

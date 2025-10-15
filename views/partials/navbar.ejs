@@ -1,0 +1,13 @@
+<nav>
+    <a href="/rooms">Список Аудиторій</a> | 
+    <% if (user) { %>
+        <% if (user.role === 'admin') { %>
+            <a href="/admin/dashboard">Адмін-панель</a> | 
+        <% } %>
+        <span>Ласкаво просимо, <%= user.username %>!</span> | 
+        <a href="/logout">Вихід</a>
+    <% } else { %>
+        <a href="/login">Вхід</a>
+    <% } %>
+</nav>
+<hr>
