@@ -2,7 +2,7 @@
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-
+require('dotenv').config()
 // 1. Ініціалізація та конфігурація
 const app = express();
 const PORT = process.env.PORT || 3000; // Використовуйте порт, наданий Render, або 3000 локально
@@ -15,6 +15,7 @@ app.set('views', 'views');
 // 3. Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public')); // Для статичних файлів (CSS/JS)
+
 
 // Налаштування сесій
 app.use(session({
