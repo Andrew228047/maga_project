@@ -1,28 +1,33 @@
 // app.js
+require('dotenv').config(); 
 const express = require('express');
 const session = require('express-session');
-const bodyParser = require('body-parser');
-require('dotenv').config()
-// 1. Ініціалізація та конфігурація
+// Імпортуємо MySQLStore
+const MySQLStore = require('express-mysql-session')(session); 
+const db = require('./config/db'); // Ваш пул підключень
+
 const app = express();
-const PORT = process.env.PORT || 3000; // Використовуйте порт, наданий Render, або 3000 локально
 
+// Налаштування MySQL Session Store:
+// Використовуємо пул підключень, який ми створили в db.js
+const sessionStore = new MySQLStore({
+    clearExpired: true,
+    checkExpirationInterval: 900000, // 15 хвилин
+    expiration: 86400000, // 24 години
+    createTableIfMissing: true, // Це створить необхідну таблицю 'sessions' у вашій БД
+    endConnectionOnClose: true
+}, db); 
 
-// 2. Налаштування шаблонізатора EJS
-app.set('view engine', 'ejs');
-app.set('views', 'views');
-
-// 3. Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public')); // Для статичних файлів (CSS/JS)
-
-
-// Налаштування сесій
+// Налаштування Express Session
 app.use(session({
-    secret: 'SUPER_SECRET_KEY', 
+    secret: process.env.SESSION_SECRET, 
+    store: sessionStore, // ВИКОРИСТОВУЄМО MySQL Store
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 } // 24 години
+    saveUninitialized: false,
+    cookie: { 
+        secure: 'auto', // Railway використовує HTTPS, 'auto' обробляє це
+        maxAge: 86400000 
+    }
 }));
 
 // Глобальна змінна для доступу до даних користувача у всіх шаблонах
