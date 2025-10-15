@@ -15,8 +15,8 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT, // !!! КРИТИЧНО ВАЖЛИВО: ПОРТ AIVEN !!!
     
     ssl: {
-        // Використовуємо абсолютний шлях до кореня проєкту
-        ca: fs.readFileSync(path.join(__dirname, 'cert', 'ca.pem')) 
+        // Використовуємо абсолютний шлях до кореня проєкту 
+        rejectUnauthorized: true
     },
     
     waitForConnections: true,
