@@ -14,7 +14,7 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     
     try {
-        const [users] = await pool.execute("SELECT * FROM users WHERE username = '" + username +"'");
+        const [users] = await pool.execute('SELECT * FROM users WHERE username = ?', [username]);
 
         if (users.length === 0) {
             return res.render('login', { error: 'Невірний логін або пароль.' });
